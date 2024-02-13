@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        
+    </style>
+</head>
+
+<body>
+
+    
+
+    <h1>Welcome to the Idea Blog</h1>
+
+    <p>This platform allows you to explore and share ideas through blog posts.</p>
+
+    
+    <button onclick="navigateTo('addPost')">Create Post</button>
+
+    <div id="combined-posts"></div>
+
+    <script>
+
+        
+async function fetchAndDisplayPosts() {
+            try {
+                const folderPath = './posts/combineJSONDATA'; // Adjust the path
+                const response = await fetch(folderPath);
+                const { combineJSONDATA } = await response.json();
+
+                const posts = combineJSONDATA; // Assuming the response directly contains posts
+
+                const htmlContent = posts.map(post => `
+                    <div class="blog-post">
+                        <h2>${post.title}</h2>
+                        <p>Author: ${post.author}</p>
+                        <p>${post.content}</p>
+                        <p>${post.timestamp}</p>
+                        <button onclick="deletePost('${post.id}')">Delete</button>
+                    </div>
+                `).join('');
+
+                document.getElementById('combined-posts').innerHTML = `<div id="blog-posts">${htmlContent}</div>`;
+            } catch (error) {
+                console.error('Error displaying posts:', error);
+            }
+        }
+        document.addEventListener("DOMContentLoaded", fetchAndDisplayPosts);
+
+ 
+        function navigateTo(page) {
+            if (page === 'addPost') {
+                window.location.href = '/create/addPost';
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>
